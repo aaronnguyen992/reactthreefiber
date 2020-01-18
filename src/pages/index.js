@@ -1,21 +1,39 @@
-import React from "react"
-import { Link } from "gatsby"
+import React, { useState, useRef } from "react"
+import { Canvas, useFrame } from 'react-three-fiber';
+import { useSpring, a } from 'react-spring/three';
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import './style.css';
+
+const Box = () => {
+  // const meshRef = useRef();
+  const [hovered, setHovered] = useState(false);
+  const [active, setActive] = useState(false);
+  const props = useSpring({
+    scale: active ? [1.5, 1.5, 1.5] : [1, 1, 1],
+    color: hovered ? "gray" : "hotpink"
+  })
+  // useFrame(() => {
+  //   meshRef.current.rotation.y += 0.01
+  // })
+
+  return(
+    <a.mesh
+      // ref={meshRef} 
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+      onClick={() => setActive(!active)}
+      scale={props.scale}
+    >
+      <boxBufferGeometry attach="geometry" args={[1, 1, 1]}/>
+      <a.meshBasicMaterial attach="material" color={props.color}/>
+    </a.mesh>
+  )
+}
 
 const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link>
-  </Layout>
+  <Canvas>
+    <Box />
+  </Canvas>
 )
 
 export default IndexPage
