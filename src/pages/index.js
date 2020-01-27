@@ -67,25 +67,30 @@ const Box = () => {
       scale={props.scale}
       castShadow
     >
-      <ambientLight />
-      <spotLight position={[0, 5, 10]} penumbra={1} castShadow/>
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]}/>
       <a.meshPhysicalMaterial attach="material" color={props.color}/>
+      <ambientLight />
+      <spotLight position={[0, 5, 10]} penumbra={1} castShadow/>
     </a.mesh>
   )
 }
 
 const IndexPage = () => (
-  <Canvas camera={{ position: [0, 0, 5] }} onCreated={({ gl }) => {
-    gl.shadowMap.enabled = true
-    gl.shadowMap.type = THREE.PCFSoftShadowMap
-  }}>
-    <fog attach="fog" args={["white", 5, 10]} />
-    <Controls />
-    <Box />
-    <Plane />
-    <Space />
-  </Canvas>
+  <div className="container">
+    <h1>Hello World</h1>
+    <Canvas camera={{ position: [0, 0, 20] }} onCreated={({ gl }) => {
+      gl.shadowMap.enabled = true
+      gl.shadowMap.type = THREE.PCFSoftShadowMap
+    }}>
+      <ambientLight intensity={0.5}/>
+      <spotLight position={[15, 20, 5]} penumbra={1} castShadow/>
+      <fog attach="fog" args={["black", 10, 25]} />
+      <Controls />
+      {/* <Box /> */}
+      {/* <Plane /> */}
+      <Space />
+    </Canvas>
+  </div>
 )
 
 export default IndexPage
