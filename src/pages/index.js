@@ -7,34 +7,38 @@ import { useSpring, a } from 'react-spring/three';
 
 import './style.css';
 
-extend({ OrbitControls })
+extend({ OrbitControls });
 
 const Space = () => {
-  const[model, setModel] = useState()
+  const[model, setModel] = useState();
   useEffect(() => {
     new GLTFLoader().load('/scene.gltf', setModel)
-  })
+  });
   
-  return model ? <primitive object={model.scene} /> : null
+  return model ? <primitive object={model.scene} position={[-5, 0, 0]} /> : null;
 }
 
 const Controls = () => {
-  const orbitRef = useRef()
-  const { camera, gl } = useThree()
+  const orbitRef = useRef();
+  const { camera, gl } = useThree();
 
   useFrame(() => {
-    orbitRef.current.update()
-  })
+    orbitRef.current.update();
+  });
   return (
     <orbitControls 
       args={[camera, gl.domElement]}
       ref={orbitRef}
       autoRotate
+      autoRotateSpeed={1}
+      enableKeys={false}
+      enableZoom={false}
+      mouseButtons={{LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.ROTATE, RIGHT: THREE.MOUSE.ROTATE}}
       maxPolarAngle={Math.PI / 3}
       minPolarAngle={Math.PI / 3}
     />
-  )
-}
+  );
+};
 
 const Plane = () => {
   return(
@@ -42,8 +46,8 @@ const Plane = () => {
       <planeBufferGeometry attach="geometry" args={[100, 100]}/>
       <meshPhysicalMaterial attach="material" color="gray"/>
     </mesh>
-  )
-}
+  );
+};
 
 const Box = () => {
   // const meshRef = useRef();
@@ -52,7 +56,7 @@ const Box = () => {
   const props = useSpring({
     scale: active ? [1.5, 1.5, 1.5] : [1, 1, 1],
     color: hovered ? "hotpink" : "gray"
-  })
+  });
 
   // useFrame(() => {
   //   meshRef.current.rotation.y += 0.01
@@ -65,32 +69,36 @@ const Box = () => {
       onPointerOut={() => setHovered(false)}
       onClick={() => setActive(!active)}
       scale={props.scale}
-      castShadow
+      // castShadow
     >
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]}/>
       <a.meshPhysicalMaterial attach="material" color={props.color}/>
       <ambientLight />
       <spotLight position={[0, 5, 10]} penumbra={1} castShadow/>
     </a.mesh>
-  )
-}
+  );
+};
 
 const IndexPage = () => (
   <div className="container">
-    <h1>Hello World</h1>
-    <Canvas camera={{ position: [0, 0, 20] }} onCreated={({ gl }) => {
+    <div className="text-container">
+      <h1>Hi</h1>
+      <h1>I'm Aaron Nguyen</h1>
+      <h3>I'm a Full Stack Developer based out of Laguna Hills</h3>
+    </div>
+    <Canvas camera={{ position: [0, 0, 25] }} onCreated={({ gl }) => {
       gl.shadowMap.enabled = true
       gl.shadowMap.type = THREE.PCFSoftShadowMap
     }}>
       <ambientLight intensity={0.5}/>
-      <spotLight position={[15, 20, 5]} penumbra={1} castShadow/>
-      <fog attach="fog" args={["black", 10, 25]} />
+      {/* <spotLight position={[15, 20, 5]} penumbra={1} castShadow/> */}
+      {/* <fog attach="fog" args={["black", 15, 90]} /> */}
       <Controls />
       {/* <Box /> */}
       {/* <Plane /> */}
       <Space />
     </Canvas>
   </div>
-)
+);
 
-export default IndexPage
+export default IndexPage;
